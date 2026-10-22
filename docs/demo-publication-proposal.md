@@ -97,7 +97,11 @@ The seed uses its original currencies. BRL needs configuration before a BRL-valu
 Audit, type checks, lint and lint:slop passed. The full uncached suite passed 1,301 tests in a fresh test database.
 Test OAuth fixtures matched the repository CI configuration and were set only in the test process.
 The demonstration environment has no external identity-provider credentials.
-Cold development compilation exceeded the VPS memory budget. Hosted evaluation requires a validated production build.
+Cold development compilation exceeded the VPS memory budget. A production build avoids repeated development compilation.
+The local production build passed with `NODE_OPTIONS=--max-old-space-size=3072 bun run build --webpack` from `apps/app`.
+The production application started in 242 milliseconds and rendered the original contacts page through the isolated HTTPS gateway.
+Both application and API used production mode. The gateway used the runtime's `__Secure-crm.session_token` cookie name.
+The proposed public hostname and trusted public TLS remain unconfigured.
 
 ## References
 
