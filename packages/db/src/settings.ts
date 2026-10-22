@@ -65,13 +65,30 @@ export async function readContextDevKey(db: Db): Promise<string | null> {
 	return row?.contextDevApiKey?.trim() || null;
 }
 
+export async function readResearchSetupSkipped(db: Db): Promise<boolean> {
+	const row = await db.appSetting.findUnique({
+		where: { id: SETTINGS_ID },
+		select: { researchSetupSkipped: true },
+	});
+
+	return row?.researchSetupSkipped ?? false;
+}
+
+export async function skipResearchSetup(db: Db): Promise<void> {
+	await db.appSetting.upsert({
+		where: { id: SETTINGS_ID },
+		create: { id: SETTINGS_ID, researchSetupSkipped: true },
+		update: { researchSetupSkipped: true },
+	});
+}
+
 export async function writeContextDevKey(db: Db, key: string): Promise<void> {
 	const contextDevApiKey = key.trim();
 
 	await db.appSetting.upsert({
 		where: { id: SETTINGS_ID },
-		create: { id: SETTINGS_ID, contextDevApiKey },
-		update: { contextDevApiKey },
+		create: { id: SETTINGS_ID, contextDevApiKey, researchSetupSkipped: false },
+		update: { contextDevApiKey, researchSetupSkipped: false },
 	});
 }
 

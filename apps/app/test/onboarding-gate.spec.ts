@@ -132,6 +132,34 @@ describe("readWorkspaceGate", () => {
 });
 
 describe("readResearchGate", () => {
+	it("settles after explicitly skipping without a key", async () => {
+		answerWith({
+			result: { data: { configured: false, skipped: true, hint: null } },
+		});
+		expect(await readResearchGate(request("/", [SESSION_COOKIE]))).toBe(
+			"settled",
+		);
+	});
+
+	it("does not redirect companies after explicitly skipping research", async () => {
+		stub(async (url) =>
+			json(
+				url.includes("workspace.get")
+					? workspace({ onboarded: true, canRename: true })
+					: {
+							result: {
+								data: { configured: false, skipped: true, hint: null },
+							},
+						},
+			),
+		);
+		expect(
+			redirectedTo(
+				await proxy(request(`/${SLUG}/companies`, [SESSION_COOKIE])),
+			),
+		).toBeNull();
+	});
+
 	it("is settled once a key is saved, and required until then", async () => {
 		answerWith(researchKey(true));
 		expect(await readResearchGate(request("/", [SESSION_COOKIE]))).toBe(

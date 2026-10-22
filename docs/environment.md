@@ -139,7 +139,9 @@ General — an admin who cannot redeploy cannot set a variable.
   read back from a LinkedIn URL already on their record. Both capabilities in
   `agent/lib/capabilities.ts` turn on and off with this one key.
 - **An install that had the variable is asked again**: no migration, no fallback, and
-  **the gate cannot be dismissed**.
+  **Continue without research** records the choice in `AppSetting.researchSetupSkipped`.
+  The CRM opens without research. Settings → General still accepts a key later.
+  Saving a key clears the skipped state. No vendor key is fabricated.
 - **Nothing is lost while waiting.** A keyless `brand` task settles `SKIPPED` *before*
   anything marks the row `RUNNING`, and `settle` only overwrites `RUNNING` — so the
   company stays `PENDING`, which the sweep re-queues
