@@ -1,0 +1,33 @@
+server {
+    listen 443 ssl;
+    server_name crm-demo.altiussaude.com.br;
+
+    ssl_certificate /etc/letsencrypt/live/crm-demo.altiussaude.com.br/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/crm-demo.altiussaude.com.br/privkey.pem;
+
+    location = /_demo/login {
+        auth_basic "CRM demo";
+        auth_basic_user_file /etc/crm-demo/access.htpasswd;
+        alias /opt/crm-demo/gateway/login.html;
+        default_type text/html;
+        include /etc/crm-demo/session-headers.conf;
+        add_header Cache-Control "no-store";
+        add_header Referrer-Policy "no-referrer";
+    }
+
+    location /api/ {
+        proxy_pass http://127.0.0.1:3181;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Authorization "";
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:3180;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Authorization "";
+    }
+}

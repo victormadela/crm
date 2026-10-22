@@ -55,6 +55,14 @@ export class SettingsRouter {
 	}
 
 	@Mutation({
+		output: researchKeyOutput,
+		meta: restMeta("POST", "/settings/research-setup/skip", ["Settings"]),
+	})
+	async skipResearchSetup() {
+		return this.settings.skipResearchSetup();
+	}
+
+	@Mutation({
 		input: setResearchKeyInput,
 		output: researchKeyOutput,
 		meta: restMeta("PATCH", "/settings/research-key", ["Settings"]),

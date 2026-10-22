@@ -79,8 +79,10 @@ request.
 - **An unreachable API fails open** (`unknown` lets the request through).
 - **`/sign-in`, `/grant-access`, `/eve` are ungated.** `/sign-in` is the only path a
   stranger may read; `/` joins it only when `IS_MARKETING` is set.
-- **There is no way past the key gate but to answer** — Skip stranded installs, every
-  later company sitting `PENDING` with nothing saying so.
+- **Continue without research** persists `AppSetting.researchSetupSkipped` through
+  authenticated `settings.skipResearchSetup`. The gate settles after this choice.
+  Research stays unavailable without a key. Settings → General accepts a key later.
+  Saving a key clears the skipped state and queues waiting research.
 
 ### The name is also the URL
 
